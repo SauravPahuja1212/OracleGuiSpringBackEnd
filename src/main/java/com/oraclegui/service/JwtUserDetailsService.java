@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.oraclegui.entity.UserDao;
 import com.oraclegui.repository.UserRepository;
+import com.oraclegui.security.UserPrincipal;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -45,7 +46,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("User not found with username: "+username);
 		}
 		
-		return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
+		return UserPrincipal.create(user);
+		
+		//return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
 	}
 	
 	@Transactional

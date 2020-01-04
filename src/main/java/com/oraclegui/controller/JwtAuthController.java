@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oraclegui.config.JwtTokenUtil;
 import com.oraclegui.model.JwtRequest;
 import com.oraclegui.model.JwtResponse;
+import com.oraclegui.security.UserPrincipal;
 import com.oraclegui.service.JwtUserDetailsService;
 
 @CrossOrigin
@@ -36,7 +37,9 @@ public class JwtAuthController {
 	public ResponseEntity<?> createToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 		
-		final UserDetails userdetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+		final UserPrincipal userdetails = (UserPrincipal) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+		
+		//final UserDetails userdetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userdetails);
 		
 		return ResponseEntity.ok(new JwtResponse(token));
